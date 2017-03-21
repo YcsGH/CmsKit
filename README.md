@@ -22,7 +22,7 @@ pod "CmsKit"
 
 ## Author
 
-1214099793@qq.com, ycs@yuancore.com
+ycs, ycs@yuancore.com
 
 ## License
 

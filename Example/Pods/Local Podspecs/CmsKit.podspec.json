@@ -1,0 +1,33 @@
+{
+  "name": "CmsKit",
+  "version": "0.1.1",
+  "summary": "cms sdk for iOS",
+  "description": "cms sdk for ios",
+  "homepage": "https://github.com/YcsGH/CmsKit",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "ycs": "ycs@yuancore.com"
+  },
+  "source": {
+    "git": "https://github.com/YcsGH/CmsKit.git",
+    "tag": "0.1.1"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "CmsKit/Classes/**/*",
+  "public_header_files": "CmsKit/Classes/Public/*.h",
+  "frameworks": [
+    "SystemConfiguration",
+    "MobileCoreServices",
+    "CoreGraphics"
+  ],
+  "dependencies": {
+    "AFNetworking": [
+      "~> 3.1.0"
+    ]
+  }
+}

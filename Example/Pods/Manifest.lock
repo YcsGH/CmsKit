@@ -1,0 +1,33 @@
+PODS:
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
+    - AFNetworking/NSURLSession
+  - CmsKit (0.1.1):
+    - AFNetworking (~> 3.1.0)
+
+DEPENDENCIES:
+  - CmsKit (from `../`)
+
+EXTERNAL SOURCES:
+  CmsKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  CmsKit: d20af33d0db9a26f2e237f95f43604c197ab9229
+
+PODFILE CHECKSUM: bb905b490dbffd24fbd9d7f2e03f547fca36c212
+
+COCOAPODS: 1.2.0
