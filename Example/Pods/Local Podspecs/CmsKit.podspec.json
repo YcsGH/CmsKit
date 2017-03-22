@@ -1,6 +1,6 @@
 {
   "name": "CmsKit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "summary": "cms sdk for iOS",
   "description": "cms sdk for ios",
   "homepage": "https://github.com/YcsGH/CmsKit",
@@ -9,11 +9,11 @@
     "file": "LICENSE"
   },
   "authors": {
-    "ycs": "ycs@yuancore.com"
+    "ycs": "1214099793@qq.com"
   },
   "source": {
     "git": "https://github.com/YcsGH/CmsKit.git",
-    "tag": "0.1.1"
+    "tag": "0.1.2"
   },
   "platforms": {
     "ios": "8.0"
