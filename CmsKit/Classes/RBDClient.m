@@ -7,6 +7,7 @@
 //
 
 #import "RBDClient.h"
+#import "HttpHeader.h"
 
 @interface RBDClient ()
 @property (nonatomic,strong) NSURLSessionDownloadTask *ycTask;
@@ -24,6 +25,10 @@
         [responseSer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/plain", nil]];
         self.requestSerializer.timeoutInterval = 30;
         self.responseSerializer = responseSer;
+        // 加token
+        if (self.token != nil) {
+            [self.requestSerializer setValue:self.token forHTTPHeaderField:Token];
+        }
     }
     return self;
 }
@@ -54,17 +59,13 @@
             if (self.responseHandler) {
                 self.responseHandler(response);
             }
-            if (self.nextDownloadBlock) {
-                self.nextDownloadBlock();
-            }
+            [self succeedHandleFile];
         }else{ // 被动取消下载任务
             id resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
             if ([resumeData isKindOfClass:[NSData class]]) {
                 self.resumeData = (NSData *)resumeData;
             }
-            if (self.suspendBlock) {
-                self.suspendBlock(error);
-            }
+            [self handleResponseError:error];
         }
     }];
     [self.ycTask resume];
@@ -92,17 +93,13 @@
             if (self.responseHandler) {
                 self.responseHandler(response);
             }
-            if (self.nextDownloadBlock) {
-                self.nextDownloadBlock();
-            }
+            [self succeedHandleFile];
         }else{
             id resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
             if ([resumeData isKindOfClass:[NSData class]]) {
                 self.resumeData = (NSData *)resumeData;
             }
-            if (self.suspendBlock) {
-                self.suspendBlock(error);
-            }
+            [self handleResponseError:error];
         }
 
     }];
@@ -152,10 +149,109 @@
 }
 
 
-#pragma mark ====== Lazy ======
+#pragma mark ====== Download ======
 
+/**
+ *  文件删除
+ *  @param bucket bucket
+ *  @param objectKey 对象唯一ID
+ */
+-(void)simpleDeleteWithBucket:(NSString *)bucket
+                    objectKey:(NSString *)objectKey {
+    NSString *url = [NSString stringWithFormat:@"%@/object/delete/%@/%@",_serviceUrl,bucket,objectKey];
+    [[self DELETE:url parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [self networkCallBackWithResponse:responseObject];
+        [self succeedHandleFile];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self handleResponseError:error];
+    }]resume];
+}
 
+/**
+ *  文件下载
+ *  @param bucket bucket
+ *  @param objectKey 对象唯一ID
+ *  @param savepath 下载文件保存路径(默认是沙盒的Caches目录)
+ */
+-(void)downloadObjectWithBucket:(NSString *)bucket
+                      objectKey:(NSString *)objectKey
+                       savePath:(NSString *)savepath {
+    NSString *url = [NSString stringWithFormat:@"%@/object/download/%@/%@/%@",_serviceUrl,_acckey,bucket,objectKey];
+    [self downloadFileWithURL:url savePath:savepath];
+}
 
+/**
+ *  图片下载
+ *  @param bucket bucket
+ *  @param objectKey 对象唯一ID
+ *  @param savepath 下载文件保存路径(默认是沙盒的Caches目录)
+ */
+-(void)showImageWithBucket:(NSString *)bucket
+                 objectKey:(NSString *)objectKey
+                  savePath:(NSString *)savepath {
+    NSString *url = [NSString stringWithFormat:@"%@/object/image/accKey/%@/%@/%@",_serviceUrl,_acckey,bucket,objectKey];
+    [self downloadFileWithURL:url savePath:savepath];
+}
+
+/**
+ *  文件搜索
+ *  @param bucket bucket
+ *  @param pagesize 每页的数目
+ *  @param pagenum 请求页数
+ *  @param metadata 文件元数据,会放在header中
+ */
+-(void)searchObjectsWithBucket:(NSString *)bucket
+                      pageSize:(int)pagesize
+                    pageNumber:(int)pagenum
+                objectMetadata:(NSDictionary *)metadata {
+    NSString *url = [NSString stringWithFormat:@"%@/object/objectId/%@/_search",_serviceUrl,bucket];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"GET"];
+    NSString *name = [metadata objectForKey:@"name"];
+    if (name == nil) {
+        name = @"";
+    }
+    NSString *metanamekey = [NSString stringWithFormat:@"%@%@",USER_METADATA_PREFIX,@"name"];
+    NSString *pagesizekey = [NSString stringWithFormat:@"%@%@",YCORE_INDEX,@"page-size"];
+    NSString *pagenumkey = [NSString stringWithFormat:@"%@%@",YCORE_INDEX,@"page-num"];
+    [request setValue:[NSString stringWithFormat:@"%d",pagesize] forHTTPHeaderField:pagesizekey];
+    [request setValue:[NSString stringWithFormat:@"%d",pagenum] forHTTPHeaderField:pagenumkey];
+    [request setValue:self.acckey forHTTPHeaderField:S3_ACC_KEY];
+    [request setValue:self.secretkey forHTTPHeaderField:S3_SECRET_KEY];
+    [request setValue:name forHTTPHeaderField:metanamekey];
+    [[self dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        if (error == nil) {
+            [self networkCallBackWithResponse:responseObject];
+            [self succeedHandleFile];
+        }else{
+            [self handleResponseError:error];
+        }
+    }]resume];
+}
+
+#pragma mark ====== helper methods ======
+
+-(void)networkCallBackWithResponse:(id)response {
+    if (self.responseHandler) {
+        self.responseHandler(response);
+    }
+}
+
+-(void)handleResponseError:(NSError *)error {
+    if (self.suspendBlock) {
+        self.suspendBlock(error);
+        return;
+    }
+    NSLog(@"HTTP ERROR:%@",error.localizedDescription);
+}
+
+-(void)succeedHandleFile {
+    if (self.nextDownloadBlock) {
+        self.nextDownloadBlock();
+        return;
+    }
+    NSLog(@"恭喜哈,文件操作成功");
+}
 
 
 

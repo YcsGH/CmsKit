@@ -11,11 +11,55 @@
 
 typedef void (^ResponseHandler)(id responseObject);
 typedef void (^ProgressHandler)(NSProgress *progress);
-typedef void (^NextDownloadBlock)();
+typedef void (^CmsSucceedBlock)();
 typedef void (^NetworkSuspendBlock)(NSError *error);
 
 /** 断点下载工具类 */
 @interface RBDClient : AFHTTPSessionManager
+
+/** Token */
+@property (nonatomic,strong) NSString *token;
+@property (nonatomic,strong) NSString *acckey;
+@property (nonatomic,strong) NSString *secretkey;
+
+/**
+ *  文件删除
+ *  @param bucket bucket
+ *  @param objectKey 对象唯一ID
+ */
+-(void)simpleDeleteWithBucket:(NSString *)bucket
+                    objectKey:(NSString *)objectKey;
+
+/**
+ *  文件下载
+ *  @param bucket bucket
+ *  @param objectKey 对象唯一ID
+ *  @param savepath 下载文件保存路径(默认是沙盒的Caches目录)
+ */
+-(void)downloadObjectWithBucket:(NSString *)bucket
+                      objectKey:(NSString *)objectKey
+                       savePath:(NSString *)savepath;
+
+/**
+ *  图片下载
+ *  @param bucket bucket
+ *  @param objectKey 对象唯一ID
+ *  @param savepath 下载文件保存路径(默认是沙盒的Caches目录)
+ */
+-(void)showImageWithBucket:(NSString *)bucket
+                 objectKey:(NSString *)objectKey
+                  savePath:(NSString *)savepath;
+/**
+ *  文件搜索
+ *  @param bucket bucket
+ *  @param pagesize 每页的数目
+ *  @param pagenum 请求页数
+ *  @param metadata 文件元数据,会放在header中
+ */
+-(void)searchObjectsWithBucket:(NSString *)bucket
+                      pageSize:(int)pagesize
+                    pageNumber:(int)pagenum
+                objectMetadata:(NSDictionary *)metadata;
 
 /** 
  * 下载文件入口函数
@@ -24,6 +68,9 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *
  */
 -(void)downloadFileWithURL:(NSString *)url savePath:(NSString *)savePath;
+
+@property (nonatomic,strong) NSString *serviceUrl;
+
 
 /** 暂停下载 */
 -(void)pause;
@@ -46,7 +93,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 @property (nonatomic,copy) NetworkSuspendBlock suspendBlock;
 
 /** 当前文件下载成功的回调 */
-@property (nonatomic,copy) NextDownloadBlock nextDownloadBlock;
+@property (nonatomic,copy) CmsSucceedBlock nextDownloadBlock;
 
 
 @end

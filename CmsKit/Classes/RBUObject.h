@@ -14,6 +14,8 @@
 @property (nonatomic,strong) NSString *filePath;
 @property (nonatomic,assign) BOOL imageFlag;
 @property (nonatomic,strong) NSMutableDictionary *metaData;
+@property (nonatomic,strong) NSString *bucket;
+
 
 // 初始化
 -(instancetype)initWithObjectKey:(NSString *)objectKey

@@ -16,5 +16,6 @@
 #define FileType @"fileType"
 #define RBU_CACHE_KEY @"com.yuancore.cache"
 #define USER_METADATA_PREFIX @"x-amz-meta-"
+#define YCORE_INDEX @"x-ycore-index-"
 
 #endif /* HttpHeader_h */

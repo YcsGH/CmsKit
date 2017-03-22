@@ -302,12 +302,49 @@
     return [url copy];
 }
 
+#pragma mark ====== 普通上传接口 ======
 
+-(void)simpleUploadWithBucket:(NSString *)bucket
+                    objectKey:(NSString *)objectKey
+                     filePath:(NSString *)filePath
+                    imageFlag:(BOOL)imageFlag
+               objectMetadata:(NSDictionary *)metadata {
+    NSString *uu = [NSString stringWithFormat:@"%@/object/upload/%@/%@",_serviceUrl,bucket,objectKey];
+    NSData *data;
+    NSFileHandle *readHandle = [NSFileHandle fileHandleForReadingAtPath:_filePath];
+    if (readHandle == nil) return;//检查文件是否存在
+    NSMutableURLRequest *request;
+    AFHTTPRequestSerializer *ser = [[AFHTTPRequestSerializer alloc]init];
+    ser.timeoutInterval = self.timeout;
+    request = [ser multipartFormRequestWithMethod:@"POST" URLString:uu parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:data name:@"file" fileName:objectKey mimeType:(_imageFlag ? @"image/png":@"application/octet-stream")]; //
+    } error:nil];
+    for (NSString *headKey in metadata.allKeys) {
+        [request setValue:metadata[headKey] forHTTPHeaderField:headKey];
+    }
+    [[self uploadTaskWithStreamedRequest:request progress:^(NSProgress *uploadProgress){
+        if (self.progressAdapter) {
+            self.progressAdapter(uploadProgress);
+        }
+    } completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        if (error) {
+            [self handleResponseError:error];
+        }
+        else{
+            [self networkCallBackWithResponse:responseObject];
+            [self succeedHandleFile];
+        }
+    }] resume];
+    
+}
 
-
-
-
-
+-(void)succeedHandleFile {
+    if (self.nextUploadBlock) {
+        self.nextUploadBlock();
+        return;
+    }
+    NSLog(@"恭喜哈,文件上传成功");
+}
 
 
 

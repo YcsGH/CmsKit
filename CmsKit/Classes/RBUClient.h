@@ -12,13 +12,21 @@
 
 typedef void (^ResponseHandler)(id responseObject);
 typedef void (^ProgressHandler)(NSProgress *progress);
-typedef void (^NextUploadBlock)();
+typedef void (^CmsSucceedBlock)();
 typedef void (^NetworkSuspendBlock)(NSError *error);
 
 @interface RBUClient : AFHTTPSessionManager
 
 /** 文件上传入口 */
 -(void)uploadObject:(RBUObject *)rbuObject;
+
+//普通上传接口
+-(void)simpleUploadWithBucket:(NSString *)bucket
+                    objectKey:(NSString *)objectKey
+                     filePath:(NSString *)filePath
+                    imageFlag:(BOOL)imageFlag
+               objectMetadata:(NSDictionary *)metadata;
+
 
 #pragma mark ====== 必填参数 ======
 @property (nonatomic,strong) NSString *serviceUrl;//基地址
@@ -46,7 +54,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 @property (nonatomic,copy) NetworkSuspendBlock suspendBlock;
 
 /** 当前文件上传成功的回调 */
-@property (nonatomic,copy) NextUploadBlock nextUploadBlock;
+@property (nonatomic,copy) CmsSucceedBlock nextUploadBlock;
 
 
 
