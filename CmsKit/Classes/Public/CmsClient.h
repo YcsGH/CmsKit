@@ -119,7 +119,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 
 /**
  *  图片裁剪
- *  @param bucketName bucket
+ *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param width 图片裁剪宽度
  *  @param height 图片裁剪高度
@@ -134,7 +134,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
                    pointY:(int)py;
 /**
  *  图片格式转换
- *  @param bucketName bucket
+ *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param format 目标图片格式
  */
@@ -144,7 +144,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 
 /**
  *  图片信息查看
- *  @param bucketName bucket
+ *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param format 目标图片格式
  */
@@ -153,7 +153,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 
 /**
  *  图片缩略图
- *  @param bucketName bucket
+ *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param format 目标图片格式
  */
@@ -163,7 +163,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 
 /**
  *  图片多模式
- *  @param bucketName bucket
+ *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param opt 模式
  */

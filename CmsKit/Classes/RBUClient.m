@@ -310,9 +310,13 @@
                     imageFlag:(BOOL)imageFlag
                objectMetadata:(NSDictionary *)metadata {
     NSString *uu = [NSString stringWithFormat:@"%@/object/upload/%@/%@",_serviceUrl,bucket,objectKey];
+    NSLog(@"upload:%@",uu);
     NSData *data;
     NSFileHandle *readHandle = [NSFileHandle fileHandleForReadingAtPath:_filePath];
-    if (readHandle == nil) return;//检查文件是否存在
+    if (readHandle == nil){
+        NSLog(@"要上传的文件不存在!");
+        return;
+    }
     NSMutableURLRequest *request;
     AFHTTPRequestSerializer *ser = [[AFHTTPRequestSerializer alloc]init];
     ser.timeoutInterval = self.timeout;
@@ -322,6 +326,7 @@
     for (NSString *headKey in metadata.allKeys) {
         [request setValue:metadata[headKey] forHTTPHeaderField:headKey];
     }
+    NSLog(@"header:%@",request.allHTTPHeaderFields);
     [[self uploadTaskWithStreamedRequest:request progress:^(NSProgress *uploadProgress){
         if (self.progressAdapter) {
             self.progressAdapter(uploadProgress);

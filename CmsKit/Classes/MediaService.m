@@ -34,7 +34,6 @@
 -(void)acquireMediaInfoWithBucket:(NSString *)bucket
                         objectKey:(NSString *)objectKey {
     NSString *url = [NSString stringWithFormat:@"%@/avinfo/%@/%@",self.serviceUrl,bucket,objectKey];
-    NSLog(@"request url:%@",url);
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -65,7 +64,6 @@
         [parameters setObject:notifyUrl forKey:@"notifyURL"];
     }
     NSString *url = [NSString stringWithFormat:@"%@/pfop/%@/%@",self.serviceUrl,bucket,objectKey];
-    NSLog(@"request url:%@",url);
     [[self POST:url parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
