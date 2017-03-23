@@ -276,6 +276,7 @@
         _rbdClient.responseHandler = self.responseHandler;
         _rbdClient.suspendBlock = self.suspendBlock;
         _rbdClient.nextDownloadBlock = self.successBlock;
+        _rbdClient.acckey = self.acckey;
     }
     return _rbdClient;
 }
@@ -288,6 +289,7 @@
         _imService.responseHandler = self.responseHandler;
         _imService.successBlock = self.successBlock;
         _imService.token = self.token;
+        _imService.acckey = self.acckey;
     }
     return _imService;
 }

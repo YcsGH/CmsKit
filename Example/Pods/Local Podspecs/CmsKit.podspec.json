@@ -1,6 +1,6 @@
 {
   "name": "CmsKit",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "summary": "cms sdk for iOS",
   "description": "cms sdk for ios",
   "homepage": "https://github.com/YcsGH/CmsKit",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/YcsGH/CmsKit.git",
-    "tag": "0.2.5"
+    "tag": "0.2.6"
   },
   "platforms": {
     "ios": "8.0"
