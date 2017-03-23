@@ -15,7 +15,7 @@
     if (self) {
         self.requestSerializer.timeoutInterval = 40;
         AFHTTPResponseSerializer *ser = [AFHTTPResponseSerializer serializer];
-        ser.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/plain",nil];
+        ser.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/plain",@"application/octet-stream",@"image/gif",@"image/jpeg",@"image/png",nil];
         self.responseSerializer = ser;
     }
     return self;
@@ -72,6 +72,7 @@
                       objectKey:(NSString *)objectKey
                          format:(NSString *)format {
     NSString *url = [NSString stringWithFormat:@"%@/imageThumbnail/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,format];
+    
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

@@ -22,7 +22,7 @@
     self = [super init];
     if (self) {
         AFHTTPResponseSerializer *responseSer = [AFHTTPResponseSerializer serializer];
-        [responseSer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/plain", nil]];
+        [responseSer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/plain",@"application/octet-stream", nil]];
         self.requestSerializer.timeoutInterval = 30;
         self.responseSerializer = responseSer;
         // 加token
