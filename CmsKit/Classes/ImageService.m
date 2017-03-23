@@ -29,6 +29,7 @@
                    pointX:(int)px
                    pointY:(int)py {
     NSString *url = [NSString stringWithFormat:@"%@/imageCut/%@/%@/%@/%d/%d/%d/%d",self.serviceUrl,self.acckey,bucket,objectKey,width,height,px,py];
+    NSLog(@"request url:%@",url);
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -43,6 +44,7 @@
                    objectKey:(NSString *)objectKey
                       format:(NSString *)format {
     NSString *url = [NSString stringWithFormat:@"%@/imageFormat/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,format];
+    NSLog(@"request url:%@",url);
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -57,6 +59,7 @@
 -(void)acquireImageInfoWithBucket:(NSString *)bucket
                         objectKey:(NSString *)objectKey {
     NSString *url = [NSString stringWithFormat:@"%@/imageInfo/%@/%@",self.serviceUrl,bucket,objectKey];
+    NSLog(@"request url:%@",url);
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -72,7 +75,7 @@
                       objectKey:(NSString *)objectKey
                          format:(NSString *)format {
     NSString *url = [NSString stringWithFormat:@"%@/imageThumbnail/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,format];
-    
+    NSLog(@"request url:%@",url);
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -87,6 +90,7 @@
                  objectKey:(NSString *)objectKey
                        opt:(NSString *)opt {
     NSString *url = [NSString stringWithFormat:@"%@/imageView/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,opt];
+    NSLog(@"request url:%@",url);
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

@@ -38,6 +38,7 @@
     if (savePath != nil) {
         self.savedPath = savePath;
     }
+    NSLog(@"request url:%@",self.objectIpAddress);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"GET"];
     __weak typeof(self) weakSelf = self;
