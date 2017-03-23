@@ -263,7 +263,6 @@
         _rbuClient.responseHandler = self.responseHandler;
         _rbuClient.suspendBlock = self.suspendBlock;
         _rbuClient.nextUploadBlock = self.successBlock;
-        _rbuClient.token = self.token;
     }
     return _rbuClient;
 }
@@ -277,6 +276,8 @@
         _rbdClient.suspendBlock = self.suspendBlock;
         _rbdClient.nextDownloadBlock = self.successBlock;
         _rbdClient.acckey = self.acckey;
+        [_rbdClient.requestSerializer setValue:self.acckey forHTTPHeaderField:S3_ACC_KEY];
+        [_rbdClient.requestSerializer setValue:self.secretKey forHTTPHeaderField:S3_SECRET_KEY];
     }
     return _rbdClient;
 }
@@ -288,8 +289,10 @@
         _imService.suspendBlock = self.suspendBlock;
         _imService.responseHandler = self.responseHandler;
         _imService.successBlock = self.successBlock;
-        _imService.token = self.token;
         _imService.acckey = self.acckey;
+        [_imService.requestSerializer setValue:self.acckey forHTTPHeaderField:S3_ACC_KEY];
+        [_imService.requestSerializer setValue:self.secretKey forHTTPHeaderField:S3_SECRET_KEY];
+        
     }
     return _imService;
 }
@@ -301,7 +304,9 @@
         _mediaService.suspendBlock = self.suspendBlock;
         _mediaService.responseHandler = self.responseHandler;
         _mediaService.successBlock = self.successBlock;
-        _mediaService.token = self.token;
+        [_mediaService.requestSerializer setValue:self.acckey forHTTPHeaderField:S3_ACC_KEY];
+        [_mediaService.requestSerializer setValue:self.secretKey forHTTPHeaderField:S3_SECRET_KEY];
+        
     }
     return _mediaService;
 }

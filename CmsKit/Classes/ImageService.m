@@ -59,7 +59,8 @@
 -(void)acquireImageInfoWithBucket:(NSString *)bucket
                         objectKey:(NSString *)objectKey {
     NSString *url = [NSString stringWithFormat:@"%@/imageInfo/%@/%@",self.serviceUrl,bucket,objectKey];
-    NSLog(@"request url:%@",url);
+    
+    
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

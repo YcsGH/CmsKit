@@ -171,11 +171,6 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
                  objectKey:(NSString *)objectKey
                     opt:(NSString *)opt;
 
-#pragma mark ====== 可能需要设置的参数 ======
-
-/** Token */
-@property (nonatomic,strong) NSString *token;
-
 #pragma mark ====== 其他参数 ======
 
 /** 分块大小:1024x1024,即1M */

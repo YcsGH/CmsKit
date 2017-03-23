@@ -25,10 +25,6 @@
         [responseSer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/plain",@"application/octet-stream", nil]];
         self.requestSerializer.timeoutInterval = 30;
         self.responseSerializer = responseSer;
-        // 加token
-        if (self.token != nil) {
-            [self.requestSerializer setValue:self.token forHTTPHeaderField:Token];
-        }
     }
     return self;
 }
@@ -38,7 +34,6 @@
     if (savePath != nil) {
         self.savedPath = savePath;
     }
-    NSLog(@"request url:%@",self.objectIpAddress);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"GET"];
     __weak typeof(self) weakSelf = self;
