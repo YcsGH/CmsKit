@@ -316,6 +316,7 @@
         NSLog(@"要上传的文件不存在!");
         return;
     }
+    data = [readHandle readDataToEndOfFile];
     NSMutableURLRequest *request;
     AFHTTPRequestSerializer *ser = [[AFHTTPRequestSerializer alloc]init];
     ser.timeoutInterval = self.timeout;
