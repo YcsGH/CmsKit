@@ -46,9 +46,8 @@
 -(void)putObjectViaRBU:(NSString *)bucketName
              objectKey:(NSString *)objectKey
               filePath:(NSString *)filePath
-             imageFlag:(BOOL)imageFlag
         objectMetadata:(NSDictionary *)metadata {
-    self.rbuObject = [[RBUObject alloc]initWithObjectKey:objectKey filePath:filePath imageFlag:imageFlag];
+    self.rbuObject = [[RBUObject alloc]initWithObjectKey:objectKey filePath:filePath imageFlag:NO];
     _rbuObject.metaData = [self addAmzMetaPrefix:metadata];
     [_rbuObject.metaData setObject:self.acckey forKey:S3_ACC_KEY];
     [_rbuObject.metaData setObject:self.secretKey forKey:S3_SECRET_KEY];
@@ -69,12 +68,11 @@
 -(void)simpleUploadWithBucket:(NSString *)bucket
                     objectKey:(NSString *)objectKey
                      filePath:(NSString *)filePath
-                    imageFlag:(BOOL)imageFlag
                objectMetadata:(NSDictionary *)metadata {
     NSMutableDictionary *mm = [self addAmzMetaPrefix:metadata];
     [mm setObject:self.acckey forKey:S3_ACC_KEY];
     [mm setObject:self.secretKey forKey:S3_SECRET_KEY];
-    [self.rbuClient simpleUploadWithBucket:bucket objectKey:objectKey filePath:filePath imageFlag:imageFlag objectMetadata:mm];
+    [self.rbuClient simpleUploadWithBucket:bucket objectKey:objectKey filePath:filePath imageFlag:NO objectMetadata:mm];
 }
 
 #pragma mark ====== 下载 API ======

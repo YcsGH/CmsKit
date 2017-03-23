@@ -29,14 +29,12 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param bucketName bucket
  *  @param objectKey 对象唯一ID
  *  @param filePath 文件所在路径
- *  @param imageFlag 是否为图片
  *  @param metadata 文件信息
  *  metadata 最终会放在http header中
  */
 -(void)putObjectViaRBU:(NSString *)bucketName
              objectKey:(NSString *)objectKey
               filePath:(NSString *)filePath
-             imageFlag:(BOOL)imageFlag
         objectMetadata:(NSDictionary *)metadata;
 
 /**
@@ -44,14 +42,12 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param filePath 文件所在路径
- *  @param imageFlag 是否为图片
  *  @param metadata 文件信息
  *  metadata 最终会放在http header中
  */
 -(void)simpleUploadWithBucket:(NSString *)bucket
                           objectKey:(NSString *)objectKey
                            filePath:(NSString *)filePath
-                          imageFlag:(BOOL)imageFlag
                      objectMetadata:(NSDictionary *)metadata;
 
 /**
