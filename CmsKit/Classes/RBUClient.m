@@ -135,7 +135,7 @@
     data = [readHandle readDataOfLength:_partsize];
     if (data == nil) return;//检查data
     request = [ser multipartFormRequestWithMethod:@"POST" URLString:[NSString stringWithFormat:@"%@/%d",[self buildUploadFileWithChunkURL],chunk] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:data name:@"file" fileName:_currentObjectID mimeType:(_imageFlag ? @"image/png":@"application/octet-stream")]; //
+        [formData appendPartWithFileData:data name:@"file" fileName:_currentObjectID mimeType:@"application/octet-stream"]; //
     } error:nil];
     [request setValue:[NSString stringWithFormat:@"%d",self.needUploadBlocks] forHTTPHeaderField:@"X-Ycore-Blocks"];
     if (self.token != nil) {
@@ -310,9 +310,8 @@
                     imageFlag:(BOOL)imageFlag
                objectMetadata:(NSDictionary *)metadata {
     NSString *uu = [NSString stringWithFormat:@"%@/object/upload/%@/%@",_serviceUrl,bucket,objectKey];
-    NSLog(@"upload:%@",uu);
     NSData *data;
-    NSFileHandle *readHandle = [NSFileHandle fileHandleForReadingAtPath:_filePath];
+    NSFileHandle *readHandle = [NSFileHandle fileHandleForReadingAtPath:filePath];
     if (readHandle == nil){
         NSLog(@"要上传的文件不存在!");
         return;
@@ -321,7 +320,7 @@
     AFHTTPRequestSerializer *ser = [[AFHTTPRequestSerializer alloc]init];
     ser.timeoutInterval = self.timeout;
     request = [ser multipartFormRequestWithMethod:@"POST" URLString:uu parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:data name:@"file" fileName:objectKey mimeType:(_imageFlag ? @"image/png":@"application/octet-stream")]; //
+        [formData appendPartWithFileData:data name:@"file" fileName:objectKey mimeType:@"application/octet-stream"]; // imageFlag ? @"image/png":
     } error:nil];
     for (NSString *headKey in metadata.allKeys) {
         [request setValue:metadata[headKey] forHTTPHeaderField:headKey];

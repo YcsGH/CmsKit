@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CmsKit'
-  s.version          = '0.2.8'
+  s.version          = '0.3.0'
   s.summary          = 'cms sdk for iOS'
 
 # This description is used to generate tags and improve search results.
