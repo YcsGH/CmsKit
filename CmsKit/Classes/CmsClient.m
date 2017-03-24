@@ -234,6 +234,12 @@
         _serviceURL = @"";
         return;
     }
+    // 去掉后缀 '/'
+    if ([serviceURL hasSuffix:@"/"]) {
+        NSString *rr = [serviceURL substringToIndex:serviceURL.length-1];
+        _serviceURL = rr;
+        return;
+    }
     _serviceURL = serviceURL;
 }
 

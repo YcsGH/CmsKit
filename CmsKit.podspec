@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CmsKit'
-  s.version          = '1.0.1'
+  s.version          = '1.0.2'
   s.summary          = 'cms sdk for iOS'
 
 # This description is used to generate tags and improve search results.
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 
   s.homepage         = 'https://github.com/YcsGH/CmsKit'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'ycs' => '1214099793@qq.com' }
+  s.author           = { 'missL' => '1214099793@qq.com' }
   s.source           = { :git => 'https://github.com/YcsGH/CmsKit.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 

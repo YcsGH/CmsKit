@@ -155,7 +155,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
                          format:(NSString *)format;
 
 /**
- *  图片多模式
+ *  图片多模式处理
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param opt 模式
