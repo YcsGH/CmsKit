@@ -139,7 +139,6 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  图片信息查看
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
- *  @param format 目标图片格式
  */
 -(void)acquireImageInfoWithBucket:(NSString *)bucket
                         objectKey:(NSString *)objectKey;

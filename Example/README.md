@@ -5,24 +5,20 @@
 [![License](https://img.shields.io/cocoapods/l/CmsKit.svg?style=flat)](http://cocoapods.org/pods/CmsKit)
 [![Platform](https://img.shields.io/cocoapods/p/CmsKit.svg?style=flat)](http://cocoapods.org/pods/CmsKit)
 
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Requirements
-
 ## Installation
 
-CmsKit is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+* 使用pod package CmsKit.podspec 命令生成CmsKit.framework
+* 将CmsKit.framework拖入到项目中
+* 在您的Pods中添加依赖库AFNetworking 3.1.0 <br/>
+  pod 'AFNetworking', '~> 3.1.0'
+* 在info.plist中添加 NSAppTransportSecurity 相应的键值对
 
-```ruby
-pod "CmsKit"
-```
+## Usage
+参见 cms-ios-sdk使用说明.docx
 
 ## Author
 
-ycs, ycs@yuancore.com
+missL, ycs@yuancore.com
 
 ## License
 
