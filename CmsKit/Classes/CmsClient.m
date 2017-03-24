@@ -106,8 +106,8 @@
  */
 -(void)showImageWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
-                  savePath:(NSString *)savepath {
-    [self.rbdClient showImageWithBucket:bucket objectKey:objectKey savePath:savepath];
+                {
+    [self.rbdClient showImageWithBucket:bucket objectKey:objectKey savePath:@""];
 }
 
 /**

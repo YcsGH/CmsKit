@@ -60,7 +60,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  文件下载
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
- *  @param savepath 下载文件保存路径(默认是沙盒的Caches目录)
+ *  @param savepath 下载文件保存路径(默认是沙盒的Caches/Download目录)
  */
 -(void)downloadObjectWithBucket:(NSString *)bucket
                       objectKey:(NSString *)objectKey
@@ -70,11 +70,10 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  图片下载
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
- *  @param savepath 下载文件保存路径(默认是沙盒的Caches/Download目录)
  */
 -(void)showImageWithBucket:(NSString *)bucket
-                 objectKey:(NSString *)objectKey
-                  savePath:(NSString *)savepath;
+                 objectKey:(NSString *)objectKey;
+
 /**
  *  文件搜索
  *  @param bucket bucket
@@ -196,7 +195,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 /** 
   * 不再需要记录某文件的上传状态时(断点上传),
   * 可清除该文件保存在NSUserDefaults中的信息
-  *  @param objectId 上传对象的ID
+  * @param objectId 上传对象的ID
 */
 -(void)cleanUserDefaultsKeyWithObjectId:(NSString *)objectId;
 

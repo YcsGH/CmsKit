@@ -189,7 +189,7 @@
                  objectKey:(NSString *)objectKey
                   savePath:(NSString *)savepath {
     NSString *url = [NSString stringWithFormat:@"%@/object/image/accKey/%@/%@/%@",_serviceUrl,_acckey,bucket,objectKey];
-    [self downloadFileWithURL:url savePath:savepath];
+    [self downloadFileWithURL:url savePath:nil];
 }
 
 /**
