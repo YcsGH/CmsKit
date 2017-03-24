@@ -48,7 +48,8 @@
             NSString *destpath = [weakSelf buildSavepathWithUrl:response.suggestedFilename];
             return [NSURL fileURLWithPath:destpath];
         }else{
-            return [NSURL fileURLWithPath:self.savedPath];
+            NSString *destpath = [weakSelf checkSavepath:self.savedPath filename:response.suggestedFilename];
+            return [NSURL fileURLWithPath:destpath];
         }
     } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
         if (error == nil) {
@@ -82,6 +83,7 @@
             NSString *destpath = [weakSelf buildSavepathWithUrl:response.suggestedFilename];
             return [NSURL fileURLWithPath:destpath];
         }else{
+            
             return [NSURL fileURLWithPath:self.savedPath];
         }
     } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
@@ -132,18 +134,19 @@
     return rett;
 }
 
--(void)moveFileFromSourcePath:(NSString *)sourcePath toDestpath:(NSString *)destpath {
-    NSError *error;
+-(NSString *)checkSavepath:(NSString *)savepath filename:(NSString *)fileName{
     NSFileManager *fm = [NSFileManager defaultManager];
-    if ([fm fileExistsAtPath:destpath]) {
-        [fm removeItemAtPath:destpath error:&error];
+    NSError *error;
+    if (![fm fileExistsAtPath:savepath]) {
+        [fm createDirectoryAtPath:savepath withIntermediateDirectories:YES attributes:nil error:&error];
+        if (error) {
+            return [self buildSavepathWithUrl:fileName];
+        }
     }
-    [fm moveItemAtPath:sourcePath toPath:destpath error:&error];
-    if (error != nil) {
-        NSLog(@"your saved path occurs error:%@",error.localizedDescription);
-    }
+    NSString *rett = [savepath stringByAppendingPathComponent:fileName];
+    NSLog(@"file saved path:%@",rett);
+    return rett;
 }
-
 
 #pragma mark ====== Download ======
 

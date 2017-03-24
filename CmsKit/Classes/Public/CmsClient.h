@@ -30,7 +30,6 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param objectKey 对象唯一ID
  *  @param filePath 文件所在路径
  *  @param metadata 文件信息
- *  metadata 最终会放在http header中
  */
 -(void)putObjectViaRBU:(NSString *)bucketName
              objectKey:(NSString *)objectKey
@@ -42,8 +41,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param filePath 文件所在路径
- *  @param metadata 文件信息
- *  metadata 最终会放在http header中
+ *  @param metadata 文件元数据,格式为 @{@"name":@"文件名"}
  */
 -(void)simpleUploadWithBucket:(NSString *)bucket
                           objectKey:(NSString *)objectKey
@@ -179,7 +177,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 /** 进度回调 */
 @property (nonatomic,copy) ProgressHandler progressAdapter;
 
-/** 网络请求成功,对HttpResponse的处理 */
+/** 网络请求成功,主要是对HttpResponse的处理 */
 @property (nonatomic,copy) ResponseHandler responseHandler;
 
 /** 网络请求失败回调处理 */
@@ -195,7 +193,11 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 
 #pragma mark ====== 清理缓存数据 ======
 
-/** 不再需要记录某文件的上传状态时,请清除该文件保存在NSUserDefaults中的信息 */
+/** 
+  * 不再需要记录某文件的上传状态时(断点上传),
+  * 可清除该文件保存在NSUserDefaults中的信息
+  *  @param objectId 上传对象的ID
+*/
 -(void)cleanUserDefaultsKeyWithObjectId:(NSString *)objectId;
 
 
