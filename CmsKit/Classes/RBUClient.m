@@ -132,12 +132,7 @@
     [readHandle seekToFileOffset:_partsize * chunk];
     data = [readHandle readDataOfLength:_partsize];
     if (data == nil) return;//检查data
-    NSDictionary *parameters = nil;
-    if (self.keymap) {
-        NSString *md5Str = [self buildMd5StrFromMap:self.keymap];
-        parameters = @{@"key":md5Str};
-    }
-    request = [ser multipartFormRequestWithMethod:@"POST" URLString:[NSString stringWithFormat:@"%@/%d",[self buildUploadFileWithChunkURL],chunk] parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    request = [ser multipartFormRequestWithMethod:@"POST" URLString:[NSString stringWithFormat:@"%@/%d",[self buildUploadFileWithChunkURL],chunk] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:data name:@"file" fileName:_currentObjectID mimeType:@"application/octet-stream"]; //
     } error:nil];
     [request setValue:[NSString stringWithFormat:@"%d",self.needUploadBlocks] forHTTPHeaderField:@"X-Ycore-Blocks"];
@@ -192,7 +187,12 @@
 #pragma mark ====== PUT请求 ======
 
 -(void)putToMergeObject {
-    [self PUT:[self buildPUTToMergeURL] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    NSDictionary *parameters = nil;
+    if (self.keymap) {
+        NSString *md5Str = [self buildMd5StrFromMap:self.keymap];
+        parameters = @{@"key":md5Str};
+    }
+    [self PUT:[self buildPUTToMergeURL] parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         //将当前文件的HEAD状态记录在一张表里
         NSString *headKey = [NSString stringWithFormat:@"%@_%@",RBU_CACHE_KEY,self.currentObjectID];
         [[NSUserDefaults standardUserDefaults]setObject:@(1) forKey:headKey];
