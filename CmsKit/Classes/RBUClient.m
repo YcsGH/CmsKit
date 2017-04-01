@@ -187,13 +187,13 @@
 #pragma mark ====== PUT请求 ======
 
 -(void)putToMergeObject {
-    NSDictionary *parameters = nil;
+    NSString *uurl = [self buildPUTToMergeURL];
     if (self.keymap) {
         NSString *md5Str = [self buildMd5StrFromMap:self.keymap];
-        parameters = @{@"key":md5Str};
+        uurl = [NSString stringWithFormat:@"%@?key=%@",[self buildPUTToMergeURL],md5Str];
     }
-    NSLog(@"parameters:%@",parameters);
-    [self PUT:[self buildPUTToMergeURL] parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+    NSLog(@"uurl:%@",uurl);
+    [self PUT:uurl parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         //将当前文件的HEAD状态记录在一张表里
         NSString *headKey = [NSString stringWithFormat:@"%@_%@",RBU_CACHE_KEY,self.currentObjectID];
         [[NSUserDefaults standardUserDefaults]setObject:@(1) forKey:headKey];
