@@ -12,7 +12,7 @@
 
 @property (nonatomic,strong) NSString *objectKey;
 @property (nonatomic,strong) NSString *filePath;
-@property (nonatomic,assign) BOOL imageFlag;
+@property (nonatomic,strong) NSDictionary *keymap;
 @property (nonatomic,strong) NSMutableDictionary *metaData;
 @property (nonatomic,strong) NSString *bucket;
 
@@ -20,7 +20,7 @@
 // 初始化
 -(instancetype)initWithObjectKey:(NSString *)objectKey
                         filePath:(NSString *)filepath
-                       imageFlag:(BOOL)imageFlag;
+                       keyMap:(NSDictionary *)keymap;
 
 
 @end

@@ -30,11 +30,13 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param objectKey 对象唯一ID
  *  @param filePath 文件所在路径
  *  @param metadata 文件信息
+ *  @param keymap key
  */
 -(void)putObjectViaRBU:(NSString *)bucketName
              objectKey:(NSString *)objectKey
               filePath:(NSString *)filePath
-        objectMetadata:(NSDictionary *)metadata;
+        objectMetadata:(NSDictionary *)metadata
+                keyMap:(NSDictionary *)keymap;
 
 /**
  *  上传文件函数(普通上传)

@@ -8,6 +8,7 @@
 
 #import "RBUClient.h"
 #import "HttpHeader.h"
+#import <CommonCrypto/CommonDigest.h>
 
 @interface RBUClient ()
 @property (nonatomic,assign) int successFlag;//已上传个数
@@ -16,7 +17,7 @@
 @property (nonatomic,assign) int needUploadBlocks;//当前对象总块数
 @property (nonatomic,assign) int64_t uploadFileSize;//该任务所包含文件的总大小
 @property (nonatomic,strong) NSArray *resumeChunkList;//未上传块对象索引
-@property (nonatomic,assign) BOOL imageFlag;//是否为图片
+@property (nonatomic,strong) NSDictionary *keymap;//是否为图片
 
 @end
 
@@ -49,9 +50,6 @@
 }
 
 -(void)setupHttpHeaderForObject:(RBUObject *)rbuObject {
-    if (self.token != nil) {
-        [self.requestSerializer setValue:[self token] forHTTPHeaderField:Token];
-    }
     for (NSString *headKey in rbuObject.metaData.allKeys) {
         [self.requestSerializer setValue:rbuObject.metaData[headKey] forHTTPHeaderField:headKey];
     }
@@ -67,7 +65,7 @@
     self.filePath = rbuObject.filePath;
     self.currentObjectID = rbuObject.objectKey;
     self.needUploadBlocks = partCount;
-    self.imageFlag = rbuObject.imageFlag;
+    self.keymap = rbuObject.keymap;
     _successFlag = 0;
 }
 
@@ -134,7 +132,12 @@
     [readHandle seekToFileOffset:_partsize * chunk];
     data = [readHandle readDataOfLength:_partsize];
     if (data == nil) return;//检查data
-    request = [ser multipartFormRequestWithMethod:@"POST" URLString:[NSString stringWithFormat:@"%@/%d",[self buildUploadFileWithChunkURL],chunk] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSDictionary *parameters = nil;
+    if (self.keymap) {
+        NSString *md5Str = [self buildMd5StrFromMap:self.keymap];
+        parameters = @{@"key":md5Str};
+    }
+    request = [ser multipartFormRequestWithMethod:@"POST" URLString:[NSString stringWithFormat:@"%@/%d",[self buildUploadFileWithChunkURL],chunk] parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:data name:@"file" fileName:_currentObjectID mimeType:@"application/octet-stream"]; //
     } error:nil];
     [request setValue:[NSString stringWithFormat:@"%d",self.needUploadBlocks] forHTTPHeaderField:@"X-Ycore-Blocks"];
@@ -352,9 +355,37 @@
 }
 
 
+#pragma mark ====== md5 ======
 
+-(NSString *)md5:(NSString *)str {
+    const char *cStr = [str UTF8String];
+    unsigned char result[16];
+    CC_MD5(cStr, strlen(cStr), result);
+    return [[NSString stringWithFormat:            @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+             result[0], result[1], result[2], result[3],
+             result[4], result[5], result[6], result[7],
+             result[8], result[9], result[10], result[11],
+             result[12], result[13], result[14], result[15]
+             ]lowercaseString];
+}
 
-
+-(NSString *)buildMd5StrFromMap:(NSDictionary *)map {
+    NSMutableString *rett = [NSMutableString string];
+    NSMutableArray *array = [map.allKeys mutableCopy];
+    if (array.count > 0) {
+        NSArray *sortedArray = [array sortedArrayUsingSelector:@selector(compare:)];
+        for (NSString *kk in sortedArray) {
+            id value = [map objectForKey:kk];
+            [rett appendFormat:@"%@=%@&",kk,value];
+        }
+        rett = [[rett substringToIndex:rett.length-1] mutableCopy];
+    }
+    
+    if ([rett isEqualToString:@""]) {
+        return @"";
+    }
+    return [self md5:rett];
+}
 
 
 

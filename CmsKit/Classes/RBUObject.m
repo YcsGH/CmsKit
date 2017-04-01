@@ -13,12 +13,12 @@
 
 -(instancetype)initWithObjectKey:(NSString *)objectKey
                         filePath:(NSString *)filepath
-                       imageFlag:(BOOL)imageFlag{
+                       keyMap:(NSDictionary *)keymap{
     self = [super init];
     if (self) {
         self.objectKey = objectKey;
         self.filePath = filepath;
-        self.imageFlag = imageFlag;
+        self.keymap = keymap;
     }
     return self;
 }

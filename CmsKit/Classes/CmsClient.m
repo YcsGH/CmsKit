@@ -46,8 +46,10 @@
 -(void)putObjectViaRBU:(NSString *)bucketName
              objectKey:(NSString *)objectKey
               filePath:(NSString *)filePath
-        objectMetadata:(NSDictionary *)metadata {
-    self.rbuObject = [[RBUObject alloc]initWithObjectKey:objectKey filePath:filePath imageFlag:NO];
+        objectMetadata:(NSDictionary *)metadata
+                keyMap:(NSDictionary *)keymap
+{
+    self.rbuObject = [[RBUObject alloc]initWithObjectKey:objectKey filePath:filePath keyMap:keymap];
     _rbuObject.metaData = [self addAmzMetaPrefix:metadata];
     [_rbuObject.metaData setObject:self.acckey forKey:S3_ACC_KEY];
     [_rbuObject.metaData setObject:self.secretKey forKey:S3_SECRET_KEY];
