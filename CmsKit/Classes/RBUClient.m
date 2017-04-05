@@ -385,6 +385,7 @@
     if ([rett isEqualToString:@""]) {
         return @"";
     }
+    NSLog(@"map:%@",rett);
     return [self md5:rett];
 }
 
