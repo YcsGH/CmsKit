@@ -28,7 +28,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.partsize = 1024 * 1024;
+        self.partsize = 512 * 1024;//partsize
         self.requestSerializer.timeoutInterval = 40;
         AFHTTPResponseSerializer *ser = [AFHTTPResponseSerializer serializer];
         ser.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/plain",nil];
@@ -192,7 +192,6 @@
         NSString *md5Str = [self buildMd5StrFromMap:self.keymap];
         uurl = [NSString stringWithFormat:@"%@?key=%@",[self buildPUTToMergeURL],md5Str];
     }
-    NSLog(@"uurl:%@",uurl);
     [self PUT:uurl parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         //将当前文件的HEAD状态记录在一张表里
         NSString *headKey = [NSString stringWithFormat:@"%@_%@",RBU_CACHE_KEY,self.currentObjectID];
@@ -385,7 +384,6 @@
     if ([rett isEqualToString:@""]) {
         return @"";
     }
-    NSLog(@"map:%@",rett);
     return [self md5:rett];
 }
 

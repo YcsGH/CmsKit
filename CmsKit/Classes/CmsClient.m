@@ -38,7 +38,7 @@
         self.serviceURL = baseUrl;
         self.acckey = acckey;
         self.secretKey = secretKey;
-        self.partsize = 1024 * 1024;
+        self.partsize = 512 * 1024;
     }
     return self;
 }
