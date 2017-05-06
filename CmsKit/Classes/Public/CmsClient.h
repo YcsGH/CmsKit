@@ -66,7 +66,8 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  */
 -(void)downloadObjectWithBucket:(NSString *)bucket
                       objectKey:(NSString *)objectKey
-                       savePath:(NSString *)savepath;
+                       savePath:(NSString *)savepath
+                      isPrivate:(BOOL)isPrivate;
 
 /**
  *  图片下载
@@ -74,7 +75,8 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param objectKey 对象唯一ID
  */
 -(void)showImageWithBucket:(NSString *)bucket
-                 objectKey:(NSString *)objectKey;
+                 objectKey:(NSString *)objectKey
+                 isPrivate:(BOOL)isPrivate;
 
 /**
  *  文件搜索
@@ -94,9 +96,11 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  查看视频信息
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
+ *  @param isPrivate 是否启用加密调阅
  */
 -(void)acquireMediaInfoWithBucket:(NSString *)bucket
-                        objectKey:(NSString *)objectKey;
+                        objectKey:(NSString *)objectKey
+                        isPrivate:(BOOL)isPrivate;
 
 /**
  *  视频处理
@@ -104,11 +108,13 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param objectKey 对象唯一ID
  *  @param fops 操作参数
  *  @param notifyUrl 同步地址
+ *  @param isPrivate 是否启用加密调阅
  */
 -(void)pfopMediaWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
                       fops:(NSString *)fops
-                 notifyUrl:(NSString *)notifyUrl;
+                 notifyUrl:(NSString *)notifyUrl
+                 isPrivate:(BOOL)isPrivate;
 
 #pragma mark ====== 图片处理 ======
 
@@ -120,54 +126,64 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param height 图片裁剪高度
  *  @param px 裁剪起点x坐标
  *  @param py 裁剪起点y坐标
+ *  @param isPrivate 是否启用加密调阅
  */
 -(void)imageCutWithBucket:(NSString *)bucket
                 objectKey:(NSString *)objectKey
                     width:(int)width
                    height:(int)height
                    pointX:(int)px
-                   pointY:(int)py;
+                   pointY:(int)py
+                isPrivate:(BOOL)isPrivate;
 /**
  *  图片格式转换
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param format 目标图片格式
+ *  @param isPrivate 是否启用加密调阅
  */
 -(void)imageFormatWithBucket:(NSString *)bucket
                    objectKey:(NSString *)objectKey
-                      format:(NSString *)format;
+                      format:(NSString *)format
+                   isPrivate:(BOOL)isPrivate;
 
 /**
  *  图片信息查看
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
+ *  @param isPrivate 是否启用加密调阅
  */
 -(void)acquireImageInfoWithBucket:(NSString *)bucket
-                        objectKey:(NSString *)objectKey;
+                        objectKey:(NSString *)objectKey
+                        isPrivate:(BOOL)isPrivate;
 
 /**
  *  图片缩略图
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param format 目标图片格式
+ *  @param isPrivate 是否启用加密调阅
  */
 -(void)imageThumbnailWithBucket:(NSString *)bucket
                       objectKey:(NSString *)objectKey
-                         format:(NSString *)format;
+                         format:(NSString *)format
+                      isPrivate:(BOOL)isPrivate;
 
 /**
  *  图片多模式处理
  *  @param bucket bucket
  *  @param objectKey 对象唯一ID
  *  @param opt 模式
+ *  @param isPrivate 是否启用加密调阅
  */
 -(void)imageViewWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
-                    opt:(NSString *)opt;
+                    opt:(NSString *)opt
+                 isPrivate:(BOOL)isPrivate;
 
 #pragma mark ====== 其他参数 ======
 
-/** 分块大小:1024x1024,即1M */
+/** 默认分块大小:512x1024,即512k */
 @property (nonatomic,assign,readonly) int partsize;
 @property (nonatomic,strong,readonly) NSString *acckey;
 @property (nonatomic,strong,readonly) NSString *secretKey;

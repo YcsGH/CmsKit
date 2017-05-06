@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFNetworking.h>
+#import "CmsUtil.h"
 
 typedef void (^ResponseHandler)(id responseObject);
 typedef void (^CmsSucceedBlock)();
@@ -18,6 +19,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 
 @property (nonatomic,strong) NSString *serviceUrl;
 @property (nonatomic,strong) NSString *acckey;
+@property (nonatomic,strong) NSString *secretkey;
 @property (nonatomic,copy) ResponseHandler responseHandler;
 @property (nonatomic,copy) NetworkSuspendBlock suspendBlock;
 @property (nonatomic,copy) CmsSucceedBlock successBlock;
@@ -33,13 +35,15 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param height 图片裁剪高度
  *  @param px 裁剪起点x坐标
  *  @param py 裁剪起点y坐标
+ *  @param isPrivate 是否为加密调阅
  */
 -(void)imageCutWithBucket:(NSString *)bucket
                 objectKey:(NSString *)objectKey
                     width:(int)width
                    height:(int)height
                    pointX:(int)px
-                   pointY:(int)py;
+                   pointY:(int)py
+                isPrivate:(BOOL)isPrivate;
 /**
  *  图片格式转换
  *  @param bucketName bucket
@@ -48,7 +52,8 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  */
 -(void)imageFormatWithBucket:(NSString *)bucket
                    objectKey:(NSString *)objectKey
-                      format:(NSString *)format;
+                      format:(NSString *)format
+                   isPrivate:(BOOL)isPrivate;
 
 /**
  *  图片信息查看
@@ -57,7 +62,8 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param format 目标图片格式
  */
 -(void)acquireImageInfoWithBucket:(NSString *)bucket
-                        objectKey:(NSString *)objectKey;
+                        objectKey:(NSString *)objectKey
+                        isPrivate:(BOOL)isPrivate;
 
 /**
  *  图片缩略图
@@ -67,7 +73,8 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  */
 -(void)imageThumbnailWithBucket:(NSString *)bucket
                       objectKey:(NSString *)objectKey
-                         format:(NSString *)format;
+                         format:(NSString *)format
+                      isPrivate:(BOOL)isPrivate;
 
 /**
  *  图片多模式
@@ -77,7 +84,8 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  */
 -(void)imageViewWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
-                       opt:(NSString *)opt;
+                       opt:(NSString *)opt
+                 isPrivate:(BOOL)isPrivate;
 
 
 @end

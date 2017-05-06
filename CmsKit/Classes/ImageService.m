@@ -7,13 +7,14 @@
 //
 
 #import "ImageService.h"
+#import "CmsUtil.h"
 
 @implementation ImageService
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.requestSerializer.timeoutInterval = 40;
+        self.requestSerializer.timeoutInterval = 30;
         AFHTTPResponseSerializer *ser = [AFHTTPResponseSerializer serializer];
         ser.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/plain",@"application/octet-stream",@"image/gif",@"image/jpeg",@"image/png",nil];
         self.responseSerializer = ser;
@@ -27,8 +28,20 @@
                     width:(int)width
                    height:(int)height
                    pointX:(int)px
-                   pointY:(int)py {
-    NSString *url = [NSString stringWithFormat:@"%@/imageCut/%@/%@/%@/%d/%d/%d/%d",self.serviceUrl,self.acckey,bucket,objectKey,width,height,px,py];
+                   pointY:(int)py
+                isPrivate:(BOOL)isPrivate {
+    NSString *url;
+    if (isPrivate) { /* 加密调阅 */
+        NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
+        NSLog(@">>> 加密前:%@",content);
+        NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
+        url = [NSString stringWithFormat:@"%@/imageCut/private/%@/%@/%d/%d/%d/%d",self.serviceUrl,self.acckey,opt,width,height,px,py];
+        NSLog(@">>> 加密后:%@",url);
+        
+    }else{
+        url = [NSString stringWithFormat:@"%@/imageCut/%@/%@/%@/%d/%d/%d/%d",self.serviceUrl,self.acckey,bucket,objectKey,width,height,px,py];
+    }
+    
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -37,12 +50,21 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self handleResponseError:error];
     }]resume];
+    
 }
 
 -(void)imageFormatWithBucket:(NSString *)bucket
                    objectKey:(NSString *)objectKey
-                      format:(NSString *)format {
-    NSString *url = [NSString stringWithFormat:@"%@/imageFormat/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,format];
+                      format:(NSString *)format
+                   isPrivate:(BOOL)isPrivate{
+    NSString *url;
+    if (isPrivate) { /* 加密调阅 */
+        NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
+        NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
+        url = [NSString stringWithFormat:@"%@/imageFormat/private/%@/%@/%@",self.serviceUrl,self.acckey,opt,format];
+    }else{
+        url = [NSString stringWithFormat:@"%@/imageFormat/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,format];
+    }
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -55,9 +77,16 @@
 
 
 -(void)acquireImageInfoWithBucket:(NSString *)bucket
-                        objectKey:(NSString *)objectKey {
-    NSString *url = [NSString stringWithFormat:@"%@/imageInfo/%@/%@",self.serviceUrl,bucket,objectKey];
-    
+                        objectKey:(NSString *)objectKey
+                        isPrivate:(BOOL)isPrivate{
+    NSString *url;
+    if (isPrivate) { /* 加密调阅 */
+        NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
+        NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
+        url = [NSString stringWithFormat:@"%@/imageInfo/private/%@",self.serviceUrl,opt];
+    }else{
+        url = [NSString stringWithFormat:@"%@/imageInfo/%@/%@",self.serviceUrl,bucket,objectKey];
+    }
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -71,8 +100,24 @@
 
 -(void)imageThumbnailWithBucket:(NSString *)bucket
                       objectKey:(NSString *)objectKey
-                         format:(NSString *)format {
-    NSString *url = [NSString stringWithFormat:@"%@/imageThumbnail/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,format];
+                         format:(NSString *)format
+                      isPrivate:(BOOL)isPrivate {
+    NSString *url;
+    if (isPrivate) { /* 加密调阅 */
+        NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
+        NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
+        if (format) {
+          url = [NSString stringWithFormat:@"%@/imageThumbnail/private/%@/%@/%@",self.serviceUrl,self.acckey,opt,format];
+        }else{
+          url = [NSString stringWithFormat:@"%@/imageThumbnail/private/%@/%@",self.serviceUrl,self.acckey,opt];
+        }
+    }else{
+        if (format) {
+           url = [NSString stringWithFormat:@"%@/imageThumbnail/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,format];
+        }else{
+           url = [NSString stringWithFormat:@"%@/imageThumbnail/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey];
+        }
+    }
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -85,8 +130,16 @@
 
 -(void)imageViewWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
-                       opt:(NSString *)opt {
-    NSString *url = [NSString stringWithFormat:@"%@/imageView/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,opt];
+                       opt:(NSString *)opt
+                 isPrivate:(BOOL)isPrivate{
+    NSString *url;
+    if (isPrivate) { /* 加密调阅 */
+        NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
+        NSString *passwd = [CmsUtil encryptAES:content key:self.secretkey];
+        url = [NSString stringWithFormat:@"%@/imageView/private/%@/%@/%@",self.serviceUrl,self.acckey,passwd,opt];
+    }else{
+        url = [NSString stringWithFormat:@"%@/imageView/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,opt];
+    }
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -110,7 +163,7 @@
         self.suspendBlock(error);
         return;
     }
-    NSLog(@"HTTP ERROR:%@",error.localizedDescription);
+    NSLog(@"http error:%@",error.localizedDescription);
 }
 
 -(void)succeedHandleImage {

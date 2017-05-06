@@ -8,6 +8,7 @@
 
 #import "RBDClient.h"
 #import "HttpHeader.h"
+#import "CmsUtil.h"
 
 @interface RBDClient ()
 @property (nonatomic,strong) NSURLSessionDownloadTask *ycTask;
@@ -174,8 +175,16 @@
  */
 -(void)downloadObjectWithBucket:(NSString *)bucket
                       objectKey:(NSString *)objectKey
-                       savePath:(NSString *)savepath {
-    NSString *url = [NSString stringWithFormat:@"%@/object/download/%@/%@/%@",_serviceUrl,_acckey,bucket,objectKey];
+                       savePath:(NSString *)savepath
+                      isPrivate:(BOOL)isPrivate {
+    NSString *url;
+    if (isPrivate) { /* 加密调阅 */
+        NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
+        NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
+        url = [NSString stringWithFormat:@"%@/object/download/private/%@/%@",self.serviceUrl,self.acckey,opt];
+    }else{
+        url = [NSString stringWithFormat:@"%@/object/download/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey];
+    }
     [self downloadFileWithURL:url savePath:savepath];
 }
 
@@ -187,8 +196,16 @@
  */
 -(void)showImageWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
-                  savePath:(NSString *)savepath {
-    NSString *url = [NSString stringWithFormat:@"%@/object/image/accKey/%@/%@/%@",_serviceUrl,_acckey,bucket,objectKey];
+                  savePath:(NSString *)savepath
+                 isPrivate:(BOOL)isPrivate{
+    NSString *url;
+    if (isPrivate) { /* 加密调阅 */
+        NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
+        NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
+        url = [NSString stringWithFormat:@"%@/object/image/private/%@/%@",self.serviceUrl,self.acckey,opt];
+    }else{
+        url = [NSString stringWithFormat:@"%@/object/image/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey];
+    }
     [self downloadFileWithURL:url savePath:nil];
 }
 
@@ -241,7 +258,7 @@
         self.suspendBlock(error);
         return;
     }
-    NSLog(@"HTTP ERROR:%@",error.localizedDescription);
+    NSLog(@"http error:%@",error.localizedDescription);
 }
 
 -(void)succeedHandleFile {

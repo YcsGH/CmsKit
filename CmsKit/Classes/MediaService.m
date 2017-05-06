@@ -8,13 +8,14 @@
 
 #import "MediaService.h"
 #import "HttpHeader.h"
+#import "CmsUtil.h"
 
 @implementation MediaService
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.requestSerializer.timeoutInterval = 40;
+        self.requestSerializer.timeoutInterval = 30;
         AFHTTPResponseSerializer *ser = [AFHTTPResponseSerializer serializer];
         ser.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/plain",nil];
         if (self.token != nil) {
@@ -32,8 +33,16 @@
  *  @param objectKey 对象唯一ID
  */
 -(void)acquireMediaInfoWithBucket:(NSString *)bucket
-                        objectKey:(NSString *)objectKey {
-    NSString *url = [NSString stringWithFormat:@"%@/avinfo/%@/%@",self.serviceUrl,bucket,objectKey];
+                        objectKey:(NSString *)objectKey
+                        isPrivate:(BOOL)isPrivate{
+    NSString *url;
+    if (isPrivate) { /* 加密调阅 */
+        NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
+        NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
+        url = [NSString stringWithFormat:@"%@/avinfo/private/%@",self.serviceUrl,opt];
+    }else{
+        url = [NSString stringWithFormat:@"%@/avinfo/%@/%@",self.serviceUrl,bucket,objectKey];
+    }
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -55,7 +64,8 @@
 -(void)pfopMediaWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
                       fops:(NSString *)fops
-                 notifyUrl:(NSString *)notifyUrl {
+                 notifyUrl:(NSString *)notifyUrl
+                 isPrivate:(BOOL)isPrivate{
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     if (fops != nil && ![fops isEqualToString:@""]) {
         [parameters setObject:fops forKey:@"fops"];
@@ -63,7 +73,15 @@
     if (notifyUrl != nil && ![notifyUrl isEqualToString:@""]) {
         [parameters setObject:notifyUrl forKey:@"notifyURL"];
     }
-    NSString *url = [NSString stringWithFormat:@"%@/pfop/%@/%@",self.serviceUrl,bucket,objectKey];
+    
+    NSString *url;
+    if (isPrivate) { /* 加密调阅 */
+        NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
+        NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
+        url = [NSString stringWithFormat:@"%@/pfop/private/%@",self.serviceUrl,opt];
+    }else{
+        url = [NSString stringWithFormat:@"%@/pfop/%@/%@",self.serviceUrl,bucket,objectKey];
+    }
     [[self POST:url parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -88,7 +106,7 @@
         self.suspendBlock(error);
         return;
     }
-    NSLog(@"HTTP ERROR:%@",error.localizedDescription);
+    NSLog(@"http error:%@",error.localizedDescription);
 }
 
 -(void)succeedHandleImage {

@@ -96,8 +96,8 @@
  */
 -(void)downloadObjectWithBucket:(NSString *)bucket
                       objectKey:(NSString *)objectKey
-                       savePath:(NSString *)savepath {
-    [self.rbdClient downloadObjectWithBucket:bucket objectKey:objectKey savePath:savepath];
+                       savePath:(NSString *)savepath isPrivate:(BOOL)isPrivate{
+    [self.rbdClient downloadObjectWithBucket:bucket objectKey:objectKey savePath:savepath isPrivate:isPrivate];
 }
 
 /**
@@ -108,8 +108,9 @@
  */
 -(void)showImageWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
+                 isPrivate:(BOOL)isPrivate
                 {
-    [self.rbdClient showImageWithBucket:bucket objectKey:objectKey savePath:@""];
+    [self.rbdClient showImageWithBucket:bucket objectKey:objectKey savePath:@"" isPrivate:isPrivate];
 }
 
 /**
@@ -134,8 +135,9 @@
  *  @param objectKey 对象唯一ID
  */
 -(void)acquireMediaInfoWithBucket:(NSString *)bucket
-                        objectKey:(NSString *)objectKey {
-    [self.mediaService acquireMediaInfoWithBucket:bucket objectKey:objectKey];
+                        objectKey:(NSString *)objectKey
+                        isPrivate:(BOOL)isPrivate{
+    [self.mediaService acquireMediaInfoWithBucket:bucket objectKey:objectKey isPrivate:isPrivate];
 }
 
 /**
@@ -148,8 +150,9 @@
 -(void)pfopMediaWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
                       fops:(NSString *)fops
-                 notifyUrl:(NSString *)notifyUrl {
-    [self.mediaService pfopMediaWithBucket:bucket objectKey:objectKey fops:fops notifyUrl:notifyUrl];
+                 notifyUrl:(NSString *)notifyUrl
+                 isPrivate:(BOOL)isPrivate{
+    [self.mediaService pfopMediaWithBucket:bucket objectKey:objectKey fops:fops notifyUrl:notifyUrl isPrivate:isPrivate];
 }
 
 #pragma mark ====== 图片处理 ======
@@ -168,8 +171,9 @@
                     width:(int)width
                    height:(int)height
                    pointX:(int)px
-                   pointY:(int)py {
-    [self.imService imageCutWithBucket:bucket objectKey:objectKey width:width height:height pointX:px pointY:py];
+                   pointY:(int)py
+                isPrivate:(BOOL)isPrivate{
+    [self.imService imageCutWithBucket:bucket objectKey:objectKey width:width height:height pointX:px pointY:py isPrivate:isPrivate];
 }
 /**
  *  图片格式转换
@@ -179,8 +183,8 @@
  */
 -(void)imageFormatWithBucket:(NSString *)bucket
                    objectKey:(NSString *)objectKey
-                      format:(NSString *)format {
-    [self.imService imageFormatWithBucket:bucket objectKey:objectKey format:format];
+                      format:(NSString *)format isPrivate:(BOOL)isPrivate{
+    [self.imService imageFormatWithBucket:bucket objectKey:objectKey format:format isPrivate:isPrivate];
 }
 
 /**
@@ -190,8 +194,8 @@
  *  @param format 目标图片格式
  */
 -(void)acquireImageInfoWithBucket:(NSString *)bucket
-                        objectKey:(NSString *)objectKey {
-    [self.imService acquireImageInfoWithBucket:bucket objectKey:objectKey];
+                        objectKey:(NSString *)objectKey isPrivate:(BOOL)isPrivate{
+    [self.imService acquireImageInfoWithBucket:bucket objectKey:objectKey isPrivate:isPrivate];
 }
 
 /**
@@ -202,8 +206,9 @@
  */
 -(void)imageThumbnailWithBucket:(NSString *)bucket
                       objectKey:(NSString *)objectKey
-                         format:(NSString *)format {
-    [self.imService imageThumbnailWithBucket:bucket objectKey:objectKey format:format];
+                         format:(NSString *)format
+                      isPrivate:(BOOL)isPrivate{
+    [self.imService imageThumbnailWithBucket:bucket objectKey:objectKey format:format isPrivate:isPrivate];
 }
 
 /**
@@ -214,8 +219,8 @@
  */
 -(void)imageViewWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
-                       opt:(NSString *)opt {
-    [self.imService imageViewWithBucket:bucket objectKey:objectKey opt:opt];
+                       opt:(NSString *)opt isPrivate:(BOOL)isPrivate{
+    [self.imService imageViewWithBucket:bucket objectKey:objectKey opt:opt isPrivate:isPrivate];
 }
 
 #pragma mark ====== Helper Methods ======
@@ -282,6 +287,7 @@
         _rbdClient.suspendBlock = self.suspendBlock;
         _rbdClient.nextDownloadBlock = self.successBlock;
         _rbdClient.acckey = self.acckey;
+        _rbdClient.secretkey = self.secretKey;
         [_rbdClient.requestSerializer setValue:self.acckey forHTTPHeaderField:S3_ACC_KEY];
         [_rbdClient.requestSerializer setValue:self.secretKey forHTTPHeaderField:S3_SECRET_KEY];
     }
@@ -296,6 +302,7 @@
         _imService.responseHandler = self.responseHandler;
         _imService.successBlock = self.successBlock;
         _imService.acckey = self.acckey;
+        _imService.secretkey = self.secretKey;
         [_imService.requestSerializer setValue:self.acckey forHTTPHeaderField:S3_ACC_KEY];
         [_imService.requestSerializer setValue:self.secretKey forHTTPHeaderField:S3_SECRET_KEY];
         
@@ -306,6 +313,7 @@
 -(MediaService *)mediaService {
     if (!_mediaService) {
         _mediaService = [[MediaService alloc]init];
+        _mediaService.secretkey = self.secretKey;
         _mediaService.serviceUrl = self.serviceURL;
         _mediaService.suspendBlock = self.suspendBlock;
         _mediaService.responseHandler = self.responseHandler;

@@ -38,7 +38,8 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  */
 -(void)downloadObjectWithBucket:(NSString *)bucket
                       objectKey:(NSString *)objectKey
-                       savePath:(NSString *)savepath;
+                       savePath:(NSString *)savepath
+                      isPrivate:(BOOL)isPrivate;
 
 /**
  *  图片下载
@@ -48,7 +49,8 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  */
 -(void)showImageWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
-                  savePath:(NSString *)savepath;
+                  savePath:(NSString *)savepath
+                 isPrivate:(BOOL)isPrivate;
 /**
  *  文件搜索
  *  @param bucket bucket

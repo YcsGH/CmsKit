@@ -18,6 +18,7 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 
 @property (nonatomic,strong) NSString *serviceUrl;
 @property (nonatomic,strong) NSString *acckey;
+@property (nonatomic,strong) NSString *secretkey;
 @property (nonatomic,copy) ResponseHandler responseHandler;
 @property (nonatomic,copy) NetworkSuspendBlock suspendBlock;
 @property (nonatomic,copy) CmsSucceedBlock successBlock;
@@ -31,7 +32,8 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
  *  @param objectKey 对象唯一ID
  */
 -(void)acquireMediaInfoWithBucket:(NSString *)bucket
-                        objectKey:(NSString *)objectKey;
+                        objectKey:(NSString *)objectKey
+                        isPrivate:(BOOL)isPrivate;
 
 /**
  *  视频处理
@@ -43,7 +45,8 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 -(void)pfopMediaWithBucket:(NSString *)bucket
                  objectKey:(NSString *)objectKey
                       fops:(NSString *)fops
-                 notifyUrl:(NSString *)notifyUrl;
+                 notifyUrl:(NSString *)notifyUrl
+                 isPrivate:(BOOL)isPrivate;
 
 
 
