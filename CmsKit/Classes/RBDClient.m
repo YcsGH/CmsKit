@@ -182,6 +182,8 @@
         NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
         NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
         url = [NSString stringWithFormat:@"%@/object/download/private/%@/%@",self.serviceUrl,self.acckey,opt];
+        NSLog(@">>> 加密前:%@",content);
+        NSLog(@">>> 加密后:%@",url);
     }else{
         url = [NSString stringWithFormat:@"%@/object/download/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey];
     }

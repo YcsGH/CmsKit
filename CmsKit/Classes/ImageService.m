@@ -62,6 +62,7 @@
         NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
         NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
         url = [NSString stringWithFormat:@"%@/imageFormat/private/%@/%@/%@",self.serviceUrl,self.acckey,opt,format];
+        NSLog(@">>> 加密后:%@",url);
     }else{
         url = [NSString stringWithFormat:@"%@/imageFormat/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,format];
     }
@@ -84,6 +85,7 @@
         NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
         NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
         url = [NSString stringWithFormat:@"%@/imageInfo/private/%@",self.serviceUrl,opt];
+        NSLog(@">>> 加密后:%@",url);
     }else{
         url = [NSString stringWithFormat:@"%@/imageInfo/%@/%@",self.serviceUrl,bucket,objectKey];
     }
@@ -108,6 +110,7 @@
         NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
         if (format) {
           url = [NSString stringWithFormat:@"%@/imageThumbnail/private/%@/%@/%@",self.serviceUrl,self.acckey,opt,format];
+          NSLog(@">>> 加密后:%@",url);
         }else{
           url = [NSString stringWithFormat:@"%@/imageThumbnail/private/%@/%@",self.serviceUrl,self.acckey,opt];
         }
@@ -118,6 +121,7 @@
            url = [NSString stringWithFormat:@"%@/imageThumbnail/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey];
         }
     }
+    
     [[self GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -137,6 +141,7 @@
         NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
         NSString *passwd = [CmsUtil encryptAES:content key:self.secretkey];
         url = [NSString stringWithFormat:@"%@/imageView/private/%@/%@/%@",self.serviceUrl,self.acckey,passwd,opt];
+        NSLog(@">>> 加密后:%@",url);
     }else{
         url = [NSString stringWithFormat:@"%@/imageView/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,opt];
     }
