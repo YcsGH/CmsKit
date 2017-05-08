@@ -40,7 +40,6 @@
         NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
         NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
         url = [NSString stringWithFormat:@"%@/avinfo/private/%@",self.serviceUrl,opt];
-        NSLog(@">>> 加密后:%@",url);
     }else{
         url = [NSString stringWithFormat:@"%@/avinfo/%@/%@",self.serviceUrl,bucket,objectKey];
     }
@@ -80,7 +79,6 @@
         NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
         NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
         url = [NSString stringWithFormat:@"%@/pfop/private/%@",self.serviceUrl,opt];
-        NSLog(@">>> 加密后:%@",url);
     }else{
         url = [NSString stringWithFormat:@"%@/pfop/%@/%@",self.serviceUrl,bucket,objectKey];
     }

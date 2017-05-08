@@ -33,11 +33,8 @@
     NSString *url;
     if (isPrivate) { /* 加密调阅 */
         NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
-        NSLog(@">>> 加密前:%@",content);
         NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
         url = [NSString stringWithFormat:@"%@/imageCut/private/%@/%@/%d/%d/%d/%d",self.serviceUrl,self.acckey,opt,width,height,px,py];
-        NSLog(@">>> 加密后:%@",url);
-        
     }else{
         url = [NSString stringWithFormat:@"%@/imageCut/%@/%@/%@/%d/%d/%d/%d",self.serviceUrl,self.acckey,bucket,objectKey,width,height,px,py];
     }
@@ -62,7 +59,6 @@
         NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
         NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
         url = [NSString stringWithFormat:@"%@/imageFormat/private/%@/%@/%@",self.serviceUrl,self.acckey,opt,format];
-        NSLog(@">>> 加密后:%@",url);
     }else{
         url = [NSString stringWithFormat:@"%@/imageFormat/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,format];
     }
@@ -85,7 +81,6 @@
         NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
         NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
         url = [NSString stringWithFormat:@"%@/imageInfo/private/%@",self.serviceUrl,opt];
-        NSLog(@">>> 加密后:%@",url);
     }else{
         url = [NSString stringWithFormat:@"%@/imageInfo/%@/%@",self.serviceUrl,bucket,objectKey];
     }
@@ -110,7 +105,6 @@
         NSString *opt = [CmsUtil encryptAES:content key:self.secretkey];
         if (format) {
           url = [NSString stringWithFormat:@"%@/imageThumbnail/private/%@/%@/%@",self.serviceUrl,self.acckey,opt,format];
-          NSLog(@">>> 加密后:%@",url);
         }else{
           url = [NSString stringWithFormat:@"%@/imageThumbnail/private/%@/%@",self.serviceUrl,self.acckey,opt];
         }
@@ -141,7 +135,6 @@
         NSString *content = [NSString stringWithFormat:@"%@/%@/%@",[CmsUtil buildTimeStamp],bucket,objectKey];
         NSString *passwd = [CmsUtil encryptAES:content key:self.secretkey];
         url = [NSString stringWithFormat:@"%@/imageView/private/%@/%@/%@",self.serviceUrl,self.acckey,passwd,opt];
-        NSLog(@">>> 加密后:%@",url);
     }else{
         url = [NSString stringWithFormat:@"%@/imageView/%@/%@/%@/%@",self.serviceUrl,self.acckey,bucket,objectKey,opt];
     }
