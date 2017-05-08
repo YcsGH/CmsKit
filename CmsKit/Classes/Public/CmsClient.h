@@ -188,6 +188,9 @@ typedef void (^NetworkSuspendBlock)(NSError *error);
 @property (nonatomic,strong,readonly) NSString *acckey;
 @property (nonatomic,strong,readonly) NSString *secretKey;
 
+#pragma mark ====== 可配置参数 ======
+@property (nonatomic,strong) NSString *tenantId;/* 租户id */
+
 #pragma mark ====== 回调函数 ======
 
 /** 进度回调 */

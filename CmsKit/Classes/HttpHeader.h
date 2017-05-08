@@ -17,5 +17,7 @@
 #define RBU_CACHE_KEY @"com.yuancore.cache"
 #define USER_METADATA_PREFIX @"x-amz-meta-"
 #define YCORE_INDEX @"x-ycore-index-"
+#define CMS_TENANT_KEY @"x-ycore-cms-tenant"
+
 
 #endif /* HttpHeader_h */

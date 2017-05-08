@@ -324,11 +324,12 @@
     AFHTTPRequestSerializer *ser = [[AFHTTPRequestSerializer alloc]init];
     ser.timeoutInterval = self.timeout;
     request = [ser multipartFormRequestWithMethod:@"POST" URLString:uu parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:data name:@"file" fileName:objectKey mimeType:@"application/octet-stream"]; // imageFlag ? @"image/png":
+        [formData appendPartWithFileData:data name:@"file" fileName:objectKey mimeType:@"application/octet-stream"];
     } error:nil];
     for (NSString *headKey in metadata.allKeys) {
         [request setValue:metadata[headKey] forHTTPHeaderField:headKey];
     }
+    
     NSLog(@"header:%@",request.allHTTPHeaderFields);
     [[self uploadTaskWithStreamedRequest:request progress:^(NSProgress *uploadProgress){
         if (self.progressAdapter) {

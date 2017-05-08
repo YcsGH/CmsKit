@@ -14,7 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - CmsKit (1.1.3):
+  - CmsKit (1.1.4):
     - AFNetworking (~> 3.1.0)
 
 DEPENDENCIES:
@@ -26,7 +26,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  CmsKit: 35fb04afcf1adfae5ed3bee9198e8547f2bd9494
+  CmsKit: 2db82f164a99f77612a30472c5125f9b1f7d1479
 
 PODFILE CHECKSUM: bb905b490dbffd24fbd9d7f2e03f547fca36c212
 

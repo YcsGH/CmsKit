@@ -74,6 +74,9 @@
     NSMutableDictionary *mm = [self addAmzMetaPrefix:metadata];
     [mm setObject:self.acckey forKey:S3_ACC_KEY];
     [mm setObject:self.secretKey forKey:S3_SECRET_KEY];
+    if (self.tenantId != nil) { /* tenant */
+        [mm setObject:self.tenantId forKey:CMS_TENANT_KEY];
+    }
     [self.rbuClient simpleUploadWithBucket:bucket objectKey:objectKey filePath:filePath imageFlag:NO objectMetadata:mm];
 }
 
@@ -175,6 +178,7 @@
                 isPrivate:(BOOL)isPrivate{
     [self.imService imageCutWithBucket:bucket objectKey:objectKey width:width height:height pointX:px pointY:py isPrivate:isPrivate];
 }
+
 /**
  *  图片格式转换
  *  @param bucketName bucket
@@ -266,6 +270,14 @@
     _secretKey = secretKey;
 }
 
+-(void)setTenantId:(NSString *)tenantId {
+    if (tenantId == nil) {
+        _tenantId = @"";
+        return;
+    }
+    _tenantId = tenantId;
+}
+
 -(RBUClient *)rbuClient {
     if (!_rbuClient) {
         _rbuClient = [[RBUClient alloc]init];
@@ -290,6 +302,9 @@
         _rbdClient.secretkey = self.secretKey;
         [_rbdClient.requestSerializer setValue:self.acckey forHTTPHeaderField:S3_ACC_KEY];
         [_rbdClient.requestSerializer setValue:self.secretKey forHTTPHeaderField:S3_SECRET_KEY];
+        if (self.tenantId != nil) {
+            [_rbdClient.requestSerializer setValue:self.tenantId forHTTPHeaderField:CMS_TENANT_KEY];
+        }
     }
     return _rbdClient;
 }
@@ -305,7 +320,9 @@
         _imService.secretkey = self.secretKey;
         [_imService.requestSerializer setValue:self.acckey forHTTPHeaderField:S3_ACC_KEY];
         [_imService.requestSerializer setValue:self.secretKey forHTTPHeaderField:S3_SECRET_KEY];
-        
+        if (self.tenantId != nil) {
+            [_imService.requestSerializer setValue:self.tenantId forHTTPHeaderField:CMS_TENANT_KEY];
+        }
     }
     return _imService;
 }
@@ -320,6 +337,9 @@
         _mediaService.successBlock = self.successBlock;
         [_mediaService.requestSerializer setValue:self.acckey forHTTPHeaderField:S3_ACC_KEY];
         [_mediaService.requestSerializer setValue:self.secretKey forHTTPHeaderField:S3_SECRET_KEY];
+        if (self.tenantId != nil) {
+            [_mediaService.requestSerializer setValue:self.tenantId forHTTPHeaderField:CMS_TENANT_KEY];
+        }
         
     }
     return _mediaService;
