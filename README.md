@@ -9,7 +9,7 @@
 
 * 使用pod package CmsKit.podspec 命令生成CmsKit.framework
 * 将CmsKit.framework拖入到项目中
-* 在您的Pods中添加依赖库AFNetworking 3.1.0 <br/>
+* 在您的Pods中添加依赖库AFNetworking <br/>
   pod 'AFNetworking', '~> 3.1.0'
 * 在info.plist中添加 NSAppTransportSecurity 相应的键值对
 
@@ -18,7 +18,7 @@
 
 ## Author
 
-missL, ycs@yuancore.com
+yangcs, 1214099793@qq.com
 
 ## License
 
